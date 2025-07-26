@@ -1,0 +1,79 @@
+`timescale 1ns / 1ps
+
+module pipelined_tb;
+
+    // Testbench signals
+    wire o_insn_vld;
+    reg i_clk, i_rst;
+    reg [31:0] i_io_sw;
+
+    wire [31:0] pc_debug;
+//  wire [63:0] count;
+//  wire interrupt;
+    wire [31:0] o_io_lcd;
+    wire [31:0] o_io_ledg;
+    wire [31:0] o_io_ledr;
+    wire [6:0] o_io_hex0;
+    wire [6:0] o_io_hex1;
+    wire [6:0] o_io_hex2;
+    wire [6:0] o_io_hex3;
+    wire [6:0] o_io_hex4;
+    wire [6:0] o_io_hex5;
+    wire [6:0] o_io_hex6;
+    wire [6:0] o_io_hex7;
+    wire [31:0] o_paddr;
+    wire        o_pwrite;
+    wire        o_psel;
+    wire        o_penable;
+    wire [31:0] o_pwdata;
+    reg [31:0] i_prdata;
+    reg        i_pready;  
+	pipelined uut (
+        .o_insn_vld(o_insn_vld),
+        .i_clk(i_clk),
+        .i_reset(i_rst),
+	.o_pc_debug(pc_debug),
+//	.cnt(count),
+//	.interrupt(interrupt),
+	.o_io_lcd(o_io_lcd),
+	.o_io_ledg(o_io_ledg),
+	.o_io_ledr(o_io_ledr),
+	.o_io_hex0(o_io_hex0),
+	.o_io_hex1(o_io_hex1),
+	.o_io_hex2(o_io_hex2),
+	.o_io_hex3(o_io_hex3),
+	.o_io_hex4(o_io_hex4),
+	.o_io_hex5(o_io_hex5),
+	.o_io_hex6(o_io_hex6),
+	.o_io_hex7(o_io_hex7),
+	.i_io_sw(i_io_sw),
+  .o_paddr(o_paddr),
+  .o_pwrite(o_pwrite),
+  .o_psel(o_psel),
+  .o_penable(o_penable),
+  .o_pwdata(o_pwdata),
+  .i_prdata(i_prdata),
+  .i_pready(i_pready)
+    );
+
+    // Clock generation
+    always #10 i_clk = ~i_clk;
+
+    // Test sequence
+initial begin
+    i_clk = 0;
+    i_rst = 0;
+    i_io_sw = 32'h0;
+
+    #100;         // Giữ reset trong 100ns
+    i_rst = 1;
+    i_prdata = 32'h15;
+    i_pready = 1'b1;
+    i_io_sw = 32'h4;
+
+    #2000;
+    $finish;
+end
+
+
+endmodule
